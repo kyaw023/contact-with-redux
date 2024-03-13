@@ -8,8 +8,11 @@ import {
   LoadingComponent,
   NoContactLists,
 } from "../components";
-import customHook from "../hook/customHook";
-import { deleteContactData, getContactData } from "../service/contact.service";
+import { deleteContactData } from "../service/contact.service";
+import {
+  useEditContactMutation,
+  useGetContactsQuery,
+} from "../stores/endpoints/contact.endpoint";
 
 const ContactPage = () => {
   // const [contacts, setContacts] = useState({
@@ -45,11 +48,16 @@ const ContactPage = () => {
     setUpdate(!update);
   };
 
-  const { data, loading, error } = customHook(
-    getContactData,
-    "/contact",
-    update
-  );
+  // const { data, loading, error } = customHook(
+  //   getContactData,
+  //   "/contact",
+  //   update
+  // );
+
+  const { isError, isLoading, data, isSuccess } = useGetContactsQuery();
+  console.log(data)
+
+  // const contacts = data?.contacts?.data;
 
   const contacts = data?.contacts?.data;
 
@@ -65,7 +73,7 @@ const ContactPage = () => {
       </div>
       <div>
         {contacts === null && <NoContactLists />}
-        {loading && <LoadingComponent />}
+        {isLoading && <LoadingComponent />}
         {contacts && (
           <div>
             <div className="mb-10">

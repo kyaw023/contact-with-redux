@@ -20,6 +20,10 @@ const LoginPage = () => {
 
   const { loading, data, error } = useSelector((store) => store.auth);
 
+  // const [loginFun, { isError, isLoading, data, isSuccess }] =
+  //   useLoginMutation();
+
+  // console.log(isLoading, data, isError, isSuccess);
   const dispatch = useDispatch();
 
   const handleInputChange = (e) => {
@@ -36,8 +40,8 @@ const LoginPage = () => {
     e.preventDefault();
 
     dispatch(processing());
-    const res = await postData("login", formData);
-    console.log(res.data);
+    const res = await postData("/login", formData);
+    console.log(res);
     dispatch(login(res.data));
   };
 
@@ -47,7 +51,14 @@ const LoginPage = () => {
         {loading ? (
           <LoadingComponent />
         ) : (
-          <div className="center">
+          <div className="center space-x-5">
+            <div>
+              <img
+                className=" h-[400px]"
+                src="https://img.freepik.com/free-vector/login-concept-illustration_114360-739.jpg"
+                alt=""
+              />
+            </div>
             <div className=" w-[360px]">
               <h1 className="title">Login your contact</h1>
               <form onSubmit={submitHandler} className=" space-y-5 mt-10">

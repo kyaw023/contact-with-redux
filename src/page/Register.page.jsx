@@ -38,7 +38,7 @@ const RegisterPage = () => {
     //postDataAction(dispatch, formData, "/register");
     dispatch(processing());
     const res = await registerData(formData);
-    console.log(res);
+    
     dispatch(register(res));
   };
 

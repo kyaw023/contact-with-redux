@@ -14,7 +14,7 @@ const ContactListsComponent = ({
   const nav = useNavigate();
 
   const editHandleBtn = () => {
-    console.log(id);
+    
     nav("/home/add", {
       state: { data: contact, edit: true },
     });

@@ -1,14 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   ButtonComponent,
   FormComponent,
   LoadingComponent,
 } from "../components";
-import { editContactData } from "../service/contact.service";
-import { postDataAction } from "../stores/action/auth.action";
+import {
+  useCreateContactMutation,
+  useEditContactMutation,
+} from "../stores/endpoints/contact.endpoint";
+
 const ContactAddPage = () => {
+  const [createFun, { isError, isLoading, data, isSuccess }] =
+    useCreateContactMutation();
+  const [
+    editFun,
+    {
+      isError: editError,
+      isLoading: editLoading,
+      data: editData,
+      isSuccess: editSuccess,
+    },
+  ] = useEditContactMutation();
   const [contactData, setContactData] = useState({
     name: "",
     phone: "",
@@ -17,13 +30,16 @@ const ContactAddPage = () => {
     photo: "",
   });
 
-  const { loading, data, error } = useSelector((store) => store.auth);
-  const dispatch = useDispatch();
+  console.log(editData?.contact, editError, editSuccess);
+
+  // const { loading, data, error } = useSelector((store) => store.auth);
+  // const dispatch = useDispatch();
 
   const location = useLocation();
 
   const nav = useNavigate();
 
+  // to get already contact data
   useEffect(() => {
     if (location.state?.edit) {
       const { name, phone, email, address } = location.state.data;
@@ -45,9 +61,10 @@ const ContactAddPage = () => {
     e.preventDefault();
     let res;
     if (location.state?.edit) {
-      res = await editContactData(location.state.data?.id, contactData);
+      res = await editFun(location.state.data?.id, contactData);
+      console.log(res);
     } else {
-      res = postDataAction(dispatch, contactData, "/contact");
+      res = await createFun(contactData);
     }
 
     if (res) {
@@ -57,7 +74,7 @@ const ContactAddPage = () => {
 
   return (
     <div>
-      {loading ? (
+      {isLoading ? (
         <LoadingComponent />
       ) : (
         <div className=" my-10 ">
